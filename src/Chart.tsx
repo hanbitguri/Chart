@@ -3,12 +3,14 @@ import {
   CategoryScale,
   LinearScale,
   BarElement,
-  PointElement, //
+  PointElement,
+  RadialLinearScale,
+  Filler,
   LineElement, //line
   Legend,
 } from "chart.js";
 
-import { Bar, Line } from "react-chartjs-2";
+import { Bar, Line, Radar } from "react-chartjs-2";
 
 type ChartProps = {
   type: string;
@@ -135,6 +137,65 @@ export function Chart(props: ChartProps) {
     };
     return <Line options={options} data={data} />;
   }
+  if (props.type === "radar") {
+    ChartJS.register(
+      CategoryScale,
+      RadialLinearScale,
+      PointElement,
+      LineElement,
+      Filler
+    );
+    const options = {
+      plugins: {
+        legend: {
+          display: false,
+        },
+      },
+      elements: {
+        line: {
+          borderWidth: 10, // 선의 두께 설정
+        },
+      },
+      scales: {
+        r: {
+          grid: {
+            color: "rgba(0, 0, 0, 0.1)", // 그리드 라인 색상을 투명하게 설정
+          },
+          angleLines: {
+            display: false,
+          },
+          ticks: {
+            stepSize: 50, // 눈금 간격
+            callback: (value: any) => {
+              if (value === 0) {
+                return "0%"; // 0일 때 표시할 라벨
+              } else if (value === 50) {
+                return "50%"; // 50%일 때 표시할 라벨
+              } else if (value === 100) {
+                return "100%"; // 100%일 때 표시할 라벨
+              } else {
+                return ""; // 나머지 눈금은 표시하지 않음
+              }
+            },
+          },
+        },
+      },
+      fill: false,
+    };
 
+    const data = {
+      labels: ["Thing 1", "Thing 2", "Thing 3", "Thing 4", "Thing 5"],
+      datasets: [
+        {
+          label: "",
+          data: [77, 50, 78, 49, 49],
+          backgroundColor: "rgba(255, 99, 132, 0.2)",
+          borderColor: "rgba(255, 99, 132, 1)",
+          borderWidth: 10,
+        },
+      ],
+    };
+    return <Radar data={data} options={options} />;
+  }
   return <div></div>;
 }
