@@ -15,6 +15,16 @@ import { Bar, Line, Radar } from "react-chartjs-2";
 type ChartProps = {
   type: string;
 };
+type ChartData = {
+  labels: string[];
+  datasets: {
+    label: string;
+    data: number[];
+    backgroundColor: string;
+    borderColor: string;
+    borderWidth: number;
+  }[];
+};
 export function Chart(props: ChartProps) {
   if (props.type === "bar") {
     ChartJS.register(CategoryScale, LinearScale, BarElement);
@@ -145,6 +155,19 @@ export function Chart(props: ChartProps) {
       LineElement,
       Filler
     );
+
+    const data: ChartData = {
+      labels: ["Thing 1", "Thing 2", "Thing 3", "Thing 4", "986"],
+      datasets: [
+        {
+          label: "",
+          data: [17, 28, 8, 10, 87],
+          backgroundColor: "rgba(255, 99, 132, 0.2)",
+          borderColor: "rgba(255, 99, 132, 1)",
+          borderWidth: 10,
+        },
+      ],
+    };
     const options = {
       plugins: {
         legend: {
@@ -158,14 +181,13 @@ export function Chart(props: ChartProps) {
       },
       scales: {
         r: {
-          grid: {
-            color: "rgba(0, 0, 0, 0.1)", // 그리드 라인 색상을 투명하게 설정
-          },
+          min: 0,
+          max: 100,
           angleLines: {
             display: false,
           },
           ticks: {
-            stepSize: 50, // 눈금 간격
+            stepSize: 50,
             callback: (value: any) => {
               if (value === 0) {
                 return "0%"; // 0일 때 표시할 라벨
@@ -181,19 +203,6 @@ export function Chart(props: ChartProps) {
         },
       },
       fill: false,
-    };
-
-    const data = {
-      labels: ["Thing 1", "Thing 2", "Thing 3", "Thing 4", "Thing 5"],
-      datasets: [
-        {
-          label: "",
-          data: [77, 50, 78, 49, 49],
-          backgroundColor: "rgba(255, 99, 132, 0.2)",
-          borderColor: "rgba(255, 99, 132, 1)",
-          borderWidth: 10,
-        },
-      ],
     };
     return <Radar data={data} options={options} />;
   }
