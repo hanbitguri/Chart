@@ -5,8 +5,7 @@ import {
   BarElement,
   PointElement,
   RadialLinearScale,
-  Filler,
-  LineElement, //line
+  LineElement,
   Legend,
 } from "chart.js";
 
@@ -155,7 +154,6 @@ export function Chart(props: ChartProps) {
       RadialLinearScale,
       PointElement,
       LineElement,
-      Filler,
       Legend
     );
 
@@ -163,7 +161,7 @@ export function Chart(props: ChartProps) {
       labels: ["Thing 1", "Thing 2", "Thing 3", "Thing 4"],
       datasets: [
         {
-          label: "",
+          label: "지플럼",
           data: [50, 90, 33, 46],
           backgroundColor: "rgba(255, 99, 132, 0.2)",
           borderColor: "rgba(255, 99, 132, 1)",
@@ -174,7 +172,10 @@ export function Chart(props: ChartProps) {
     const options = {
       plugins: {
         legend: {
-          display: false,
+          position: "top" as const,
+          labels: {
+            boxHeight: 2,
+          },
         },
       },
       elements: {
@@ -234,8 +235,7 @@ export function Chart(props: ChartProps) {
       CategoryScale,
       RadialLinearScale,
       PointElement,
-      LineElement,
-      Filler
+      LineElement
     );
 
     const data: ChartData = {
@@ -296,5 +296,6 @@ export function Chart(props: ChartProps) {
     };
     return <Radar data={data} options={options} />;
   }
+
   return <div></div>;
 }
