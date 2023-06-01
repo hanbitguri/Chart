@@ -13,18 +13,20 @@ import {
 import { Bar, Line, Radar } from "react-chartjs-2";
 
 type ChartProps = {
-  type: string;
+  type: "bar" | "line" | "radar" | "5radar";
 };
 type ChartData = {
   labels: string[];
   datasets: {
-    label: string;
     data: number[];
-    backgroundColor: string;
-    borderColor: string;
-    borderWidth: number;
+    label?: string;
+    backgroundColor?: string;
+    borderColor?: string;
+    borderWidth?: number;
+    base?: number;
   }[];
 };
+
 export function Chart(props: ChartProps) {
   if (props.type === "bar") {
     ChartJS.register(CategoryScale, LinearScale, BarElement);
@@ -57,7 +59,7 @@ export function Chart(props: ChartProps) {
       },
     };
 
-    const data = {
+    const data: ChartData = {
       labels: ["Sound", "Words", "Sentences"],
       datasets: [
         {
@@ -119,7 +121,7 @@ export function Chart(props: ChartProps) {
         },
       },
     };
-    const data = {
+    const data: ChartData = {
       labels: [
         "Chapter1",
         "Chapter2",
@@ -153,15 +155,16 @@ export function Chart(props: ChartProps) {
       RadialLinearScale,
       PointElement,
       LineElement,
-      Filler
+      Filler,
+      Legend
     );
 
     const data: ChartData = {
-      labels: ["Thing 1", "Thing 2", "Thing 3", "Thing 4", "986"],
+      labels: ["Thing 1", "Thing 2", "Thing 3", "Thing 4"],
       datasets: [
         {
           label: "",
-          data: [17, 28, 8, 10, 87],
+          data: [50, 90, 33, 46],
           backgroundColor: "rgba(255, 99, 132, 0.2)",
           borderColor: "rgba(255, 99, 132, 1)",
           borderWidth: 10,
@@ -176,7 +179,10 @@ export function Chart(props: ChartProps) {
       },
       elements: {
         line: {
-          borderWidth: 10, // 선의 두께 설정
+          borderWidth: 10,
+        },
+        point: {
+          radius: 0,
         },
       },
       scales: {
@@ -188,15 +194,99 @@ export function Chart(props: ChartProps) {
           },
           ticks: {
             stepSize: 50,
-            callback: (value: any) => {
-              if (value === 0) {
-                return "0%"; // 0일 때 표시할 라벨
-              } else if (value === 50) {
-                return "50%"; // 50%일 때 표시할 라벨
-              } else if (value === 100) {
-                return "100%"; // 100%일 때 표시할 라벨
-              } else {
-                return ""; // 나머지 눈금은 표시하지 않음
+            callback: (value: number | string) => {
+              switch (value) {
+                case 0:
+                  return "0%";
+                case 50:
+                  return "50%";
+                case 100:
+                  return "100%";
+                default:
+                  return "";
+              }
+            },
+          },
+        },
+      },
+      fill: false,
+    };
+    return <Radar data={data} options={options} />;
+  }
+  if (props.type === "5radar") {
+    const gradeToNumber = (grade: string): number => {
+      switch (grade) {
+        case "A":
+          return 5;
+        case "B":
+          return 4;
+        case "C":
+          return 3;
+        case "D":
+          return 2;
+        case "E":
+          return 1;
+        default:
+          return 0;
+      }
+    };
+    ChartJS.register(
+      CategoryScale,
+      RadialLinearScale,
+      PointElement,
+      LineElement,
+      Filler
+    );
+
+    const data: ChartData = {
+      labels: ["Thing 1", "Thing 2", "Thing 3", "Thing 4", "Thing 5"],
+      datasets: [
+        {
+          label: "",
+          data: [gradeToNumber("A"), 1, 3, 1, 1],
+          backgroundColor: "rgba(255, 99, 132, 0.2)",
+          borderColor: "rgba(255, 99, 132, 1)",
+          borderWidth: 10,
+        },
+      ],
+    };
+    const options = {
+      plugins: {
+        legend: {
+          display: false,
+        },
+      },
+      elements: {
+        line: {
+          borderWidth: 10,
+        },
+        point: {
+          radius: 0,
+        },
+      },
+      scales: {
+        r: {
+          min: 0,
+          max: 5,
+          angleLines: {
+            display: false,
+          },
+          ticks: {
+            stepSize: 1,
+            callback: (value: number | string) => {
+              switch (value) {
+                case 1:
+                  return "1";
+                case 2:
+                  return "2";
+                case 3:
+                  return "3";
+                case 4:
+                  return "4";
+                case 5:
+                  return "5";
+                default:
+                  return "";
               }
             },
           },
