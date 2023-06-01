@@ -13,6 +13,7 @@ import { Bar, Line, Radar } from "react-chartjs-2";
 
 type ChartProps = {
   type: "bar" | "line" | "radar" | "5radar";
+  data?: {}; // props.data
 };
 type ChartData = {
   labels: string[];
